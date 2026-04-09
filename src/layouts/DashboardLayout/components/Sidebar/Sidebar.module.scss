@@ -1,0 +1,38 @@
+.container {
+    @apply hidden border-r bg-gray-100/40;
+    @apply md:block;
+}
+
+.content {
+    @apply flex h-full max-h-screen flex-col gap-2;
+}
+
+.header {
+    @apply flex h-14 items-center border-b px-4;
+    @apply lg:h-[60px] lg:px-6;
+}
+
+.nameApp{
+    @apply flex items-center gap-2 font-semibold;
+}
+
+.iconApp{
+    @apply h-6 w-6;
+}
+
+.body{
+    @apply flex-1;
+}
+
+.menu{
+    @apply grid items-start px-2 text-sm font-medium;
+    @apply lg:px-4;
+}
+
+.footer{
+    @apply mt-auto p-4;
+}
+
+.btnLogout{
+    @apply w-full;
+}
