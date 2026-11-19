@@ -20,7 +20,7 @@ export function Sidebar() {
            </div>
 
            <div className={styles.body}>
-                <nav className={styles.nemu}>
+                <nav className={styles.menu}>
                   {menuData.map((item) => (
                     <Link key={item.id} href={item.link} className={styles.item}>
                       <item.Icon className={styles.iconItem} />

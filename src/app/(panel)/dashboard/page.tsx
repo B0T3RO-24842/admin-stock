@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="h-full overflow-y-auto p-4">
+    <div className="h-full overflow-y-auto p-4 md:p-6">
       <h1 className="pb-4 text-2xl font-semibold">Dashboard</h1>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map(([label, value]) => (

@@ -43,7 +43,7 @@ export default function ProductsPage() {
   if (!rows) return <Skeleton.List />;
 
   return (
-    <div className="h-full overflow-y-auto p-4">
+    <div className="h-full overflow-y-auto p-4 md:p-6">
       <PageHead title="Productos" onNew={() => open("new")} />
       {problem && <p role="alert" className="pb-3 text-sm text-red-600">{problem}</p>}
       <Table>
@@ -73,7 +73,9 @@ export default function ProductsPage() {
         </TableBody>
       </Table>
 
-      <FormSheet open={editing !== null} title={editing === "new" ? "Nuevo producto" : "Editar producto"} onClose={() => setEditing(null)} onSubmit={save}>
+      <FormSheet open={editing !== null} title={editing === "new" ? "Nuevo producto" : "Editar producto"} onClose={() => setEditing(null)} onSubmit={save}
+        hint="El stock no se escribe aquí: sube con cada compra y baja con cada venta, para que el inventario siempre cuadre con el historial.">
+
         <Field label="Nombre"><input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} required autoFocus /></Field>
         <Field label="Nota"><textarea className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} rows={3} /></Field>
       </FormSheet>

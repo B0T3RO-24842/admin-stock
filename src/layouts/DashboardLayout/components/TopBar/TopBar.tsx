@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Sheet, SheetContent, SheetTrigger, SheetHeader,
+import { Button, Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader,
     SheetTitle } from '@/components/ui'
 import styles from './TopBar.module.scss'
 import { LogOut, Menu, Package2 } from 'lucide-react'
@@ -33,10 +33,12 @@ export function TopBar() {
                         </Link>
 
                         {menuData.map((item) => (
-                        <Link key={item.id} href={item.link} className={styles.itemMenu}>
-                            <item.Icon />
-                            {item.title}
-                        </Link>
+                        <SheetClose asChild key={item.id}>
+                            <Link href={item.link} className={styles.itemMenu}>
+                                <item.Icon />
+                                {item.title}
+                            </Link>
+                        </SheetClose>
                         ))}
                     </nav>
                 </SheetContent>

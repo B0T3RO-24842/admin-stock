@@ -24,8 +24,8 @@ export function PageHead({ title, onNew }: { title: string; onNew?: () => void }
 }
 
 // Side sheet with a form: shows the server's error message and blocks double submits.
-export function FormSheet({ open, title, onClose, onSubmit, children }: {
-  open: boolean; title: string; onClose: () => void; onSubmit: () => Promise<void>; children: ReactNode;
+export function FormSheet({ open, title, hint, onClose, onSubmit, children }: {
+  open: boolean; title: string; hint?: string; onClose: () => void; onSubmit: () => Promise<void>; children: ReactNode;
 }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -45,11 +45,12 @@ export function FormSheet({ open, title, onClose, onSubmit, children }: {
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="bg-white">
-        <SheetHeader>
+      <SheetContent className="w-full bg-white sm:max-w-md">
+        <SheetHeader className="px-6 pt-6">
           <SheetTitle>{title}</SheetTitle>
+          {hint && <p className="pt-1 text-sm text-slate-500">{hint}</p>}
         </SheetHeader>
-        <form onSubmit={submit} className="mt-6 grid gap-4">
+        <form onSubmit={submit} className="grid gap-4 overflow-y-auto px-6 pb-6">
           {children}
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <Button type="submit" disabled={busy}>{busy ? "Guardando…" : "Guardar"}</Button>

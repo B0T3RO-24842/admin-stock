@@ -27,7 +27,7 @@ export default function PurchasesPage() {
   if (!lots.rows) return <Skeleton.List />;
 
   return (
-    <div className="h-full overflow-y-auto p-4">
+    <div className="h-full overflow-y-auto p-4 md:p-6">
       <PageHead title="Compras" onNew={() => { setProductId(""); setQuantity(""); setPrice(""); setOpen(true); }} />
       <Table>
         <TableHeader>
