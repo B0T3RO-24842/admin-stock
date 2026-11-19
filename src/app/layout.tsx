@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Manager Stock",
-  description: "Desarrollado por walver",
+  description: "Control de inventario: productos, compras por lote y ventas",
 };
 
 export default function RootLayout(

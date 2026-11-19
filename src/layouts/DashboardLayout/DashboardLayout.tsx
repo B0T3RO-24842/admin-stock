@@ -1,4 +1,4 @@
-import { Sidebar } from "./components";
+import { Sidebar, TopBar } from "./components";
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss"
 
@@ -7,9 +7,9 @@ export function DashboardLayout(props: DashboardLayoutProps) {
 
   return (
     <div className={styles.container}>
-        <Sidebar />
+      <Sidebar />
       <div className={styles.body}>
-        <div>TopBar</div>
+        <TopBar/>
         <main className={styles.content}>{children}</main>
       </div>
     </div>

@@ -1,16 +1,9 @@
-"use client";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { Login } from "./components";
 
-
-import {useUser} from "@clerk/nextjs";
-import {Loading} from "@/components/shared/loading";
-import {Login} from "./components";
-import { HomePage } from "./(panel)/products/home";
-
-export default function AppPage() {
-  const {isLoaded, isSignedIn} = useUser();
-
-  if(!isLoaded) return <Loading full/>;
-  if(!isSignedIn) return <Login />;
-
-  return <HomePage/>;
+export default async function AppPage() {
+  const { userId } = await auth();
+  if (userId) redirect("/dashboard");
+  return <Login />;
 }

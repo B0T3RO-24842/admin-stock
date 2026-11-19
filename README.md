@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Admin Stock
 
-## Getting Started
+Panel para llevar el inventario de un negocio pequeño: **productos**, **compras por lote** y **ventas**, con el stock y la ganancia calculados solos.
 
-First, run the development server:
+Cada compra crea un lote con su costo; cada venta descuenta de un lote concreto. Así la ganancia de una venta es `precio de venta − costo de ese lote`, aunque el mismo producto se haya comprado a precios distintos.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Qué hace
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Dashboard:** número de productos, valor del inventario, ventas, ganancia y lista de productos con stock bajo (≤ 5) o agotados.
+- **Productos:** crear, editar y eliminar. Un producto con compras registradas no se puede eliminar (409), para no dejar el historial huérfano.
+- **Compras:** registra un lote (producto, cantidad, costo unitario). El stock del lote empieza igual a la cantidad.
+- **Ventas:** se elige el lote, la cantidad y el precio. Si no alcanza el stock responde `409`.
+- **Acceso con cuenta** (Clerk): sin sesión, las páginas redirigen al login y la API responde `401`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Decisiones de diseño
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **La API no confía en el formulario:** todo se valida en `src/lib/validate.ts` (con pruebas) antes de tocar la base.
+- **Venta atómica:** el descuento de stock es un `UPDATE … WHERE stock >= cantidad` dentro de una transacción. Dos ventas simultáneas no pueden llevarse las mismas últimas unidades ni dejar el stock negativo.
+- **Todas las rutas pasan por un único guardián** (`src/lib/route.ts`): sesión obligatoria y errores inesperados registrados, sin filtrar detalles al cliente.
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+Next.js 15 (App Router), React 19, TypeScript, Prisma + PostgreSQL, Clerk, Tailwind CSS + shadcn/ui.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Cómo correrlo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Necesitas un PostgreSQL (local con Docker: `docker run -d -p 5433:5432 -e POSTGRES_PASSWORD=stock -e POSTGRES_DB=stock postgres:16-alpine`) y una app gratis en [Clerk](https://clerk.com).
+2. Crea `.env`:
 
-## Deploy on Vercel
+   ```env
+   DATABASE_URL=postgres://postgres:stock@localhost:5433/stock
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+   CLERK_SECRET_KEY=sk_test_...
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Instala, crea las tablas y (opcional) carga datos de ejemplo:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+   npm run db:push
+   npm run seed
+   npm run dev
+   ```
+
+Pruebas: `npm test`.
+
+## Límites
+
+Los datos son compartidos entre todos los usuarios con cuenta (no hay separación por negocio), no se pueden anular compras ni ventas, y las ventas se hacen sobre un lote elegido a mano, no con descuento automático por antigüedad. Es un proyecto de práctica.
+
+Empezó como una guía de clase (Walver); la API, la validación, las compras, las ventas y el dashboard son propios.
